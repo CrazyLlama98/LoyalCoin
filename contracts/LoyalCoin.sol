@@ -17,10 +17,10 @@ contract LoyalCoin is ERC20Mintable, ERC20Burnable, Ownable {
     event AwarderRemoved(address _who);
 
     function giveAward(address user, uint awardId, uint amount, uint date) public {
-        if (awards[awardId] != msg.sender) 
-            revert("This award is not available"); 
+        if (awards[awardId] != msg.sender)
+            revert("This award is not available");
 
-        if (super.balanceOf(msg.sender) < amount) 
+        if (super.balanceOf(msg.sender) < amount)
             revert("Not enough awards");
 
         super.transfer(user, amount);
@@ -32,7 +32,7 @@ contract LoyalCoin is ERC20Mintable, ERC20Burnable, Ownable {
         return awarders[_addr];
     }
 
-    
+
     function addAwarder(address _addr) public onlyOwner {
         awarders[_addr] = true;
 
@@ -41,23 +41,22 @@ contract LoyalCoin is ERC20Mintable, ERC20Burnable, Ownable {
 
     function deleteAwarder(address _addr) public onlyOwner {
         awarders[_addr] = false;
-        
+
         emit AwarderRemoved(_addr);
     }
-        
+
     function addAward(uint index) public returns (bool) {
-        if (!isAwarder(msg.sender)) 
+        if (!isAwarder(msg.sender))
             revert("You are not an awarder");
-                            
+
         if (awards[index] == address(0x0)) {
-            awards[index] = msg.sender;    
+            awards[index] = msg.sender;
             emit AwardAdded(msg.sender, index);
 
             return true;
         }
 
         return false;
-        
     }
 
     function getAward(uint index) public view returns (address) {

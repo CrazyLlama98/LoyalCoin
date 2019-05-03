@@ -1,0 +1,31 @@
+{
+  "name": "loyalcoin-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "rimraf dist && babel ./src --out-dir dist --copy-files",
+    "start:dev": "npm run build && cross-env NODE_ENV=development HTTP_PORT=60000 node dist/index.js",
+    "start": "npm run build && cross-env NODE_ENV=production HTTP_PORT=5001 node dist/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.16.4",
+    "express-jwt": "^5.3.1",
+    "mongoose": "^5.5.5",
+    "truffle-contract": "^4.0.14",
+    "web3": "^0.20.7"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/runtime": "^7.4.4",
+    "cross-env": "^5.2.0",
+    "rimraf": "^2.6.3"
+  }
+}
