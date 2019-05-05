@@ -50,6 +50,10 @@ export default class AwardService {
 
     if (!existingAward) throw new NotFoundError(`Award with id ${id} was not found`);
 
+    var retailer = await userService.getById(existingAward.retailerId);
+
+    if (!retailer) throw new NotFoundError("Retailer was not found");
+
     Object.assign(existingAward, award);
 
     await existingAward.save();
