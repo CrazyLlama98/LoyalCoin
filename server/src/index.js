@@ -6,6 +6,7 @@ import errorHandler from './middlewares/errorHandler';
 import jwt from './middlewares/jwt';
 
 import usersController from './users/usersController';
+import awardsController from './awards/awardsController';
 
 connectMongo();
 
@@ -18,6 +19,7 @@ app.use('/api', jwt());
 
 // api routes
 app.use('/api/users', usersController);
+app.use('/api/retailers/:retailerId/awards', awardsController);
 
 app.use(errorHandler);
 

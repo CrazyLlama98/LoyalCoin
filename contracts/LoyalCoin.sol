@@ -9,14 +9,15 @@ contract LoyalCoin is ERC20Mintable, ERC20Burnable, Ownable {
     string public symbol = "LoyC";
     uint256 public decimals = 0;
     mapping(address => bool) awarders;
-    mapping(uint => address) awards;
+    mapping(string => address) awards;
 
-    event AwardGiven(address indexed _from, address indexed _to,  uint indexed _type, uint _amount, uint _date);
-    event AwardAdded(address _from, uint _type);
+    event AwardGiven(address indexed _from, address indexed _to,  string indexed _type, uint _amount, uint _date);
+    event AwardAdded(address _from, string _type);
+    event AwardRemoved(address _from, string _type);
     event AwarderAdded(address _who);
     event AwarderRemoved(address _who);
 
-    function giveAward(address user, uint awardId, uint amount, uint date) public {
+    function giveAward(address user, string memory awardId, uint amount, uint date) public {
         if (awards[awardId] != msg.sender)
             revert("This award is not available");
 
@@ -45,7 +46,7 @@ contract LoyalCoin is ERC20Mintable, ERC20Burnable, Ownable {
         emit AwarderRemoved(_addr);
     }
 
-    function addAward(uint index) public returns (bool) {
+    function addAward(string memory index) public returns (bool) {
         if (!isAwarder(msg.sender))
             revert("You are not an awarder");
 
@@ -59,8 +60,16 @@ contract LoyalCoin is ERC20Mintable, ERC20Burnable, Ownable {
         return false;
     }
 
-    function getAward(uint index) public view returns (address) {
+    function getAward(string memory index) public view returns (address) {
         return awards[index];
+    }
+
+    function deleteAward(string memory index) public {
+        if (awards[index] != msg.sender)
+            revert("This award is not available");
+
+        awards[index] == address(0x0);
+        emit AwardRemoved(msg.sender, index);
     }
 }
 

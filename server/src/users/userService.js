@@ -17,7 +17,6 @@ const web3 = new Web3(new Web3.providers.HttpProvider(ETHEREUM_URL));
 
 
 class UserService {
-
   async createUser(user, role) {
     const existingUser = await User.findOne({
       'username': user.username
@@ -36,6 +35,8 @@ class UserService {
       newUser.publicKey = web3.personal.newAccount(user.password);
       newUser.roles = [role];
 
+      web3.personal.unlockAccount(newUser.publicKey, user.password, 0);
+      
       await newUser.save();
 
       return newUser.toDto();

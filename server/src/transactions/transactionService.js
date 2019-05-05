@@ -21,8 +21,39 @@ export default class TransactionService {
   }
 
   async addAwarder(publicKey) {
+    try {
+      var instance = await LoyalCoinContract.deployed();
+
+      await instance.addAwarder(publicKey, {
+        from: web3.eth.accounts[0]
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async addAward(awardId, publicKey) {
     var instance = await LoyalCoinContract.deployed();
 
-    await instance.addAwarder(publicKey, { from: publicKey });
+    var result = await instance.addAward(awardId, {
+      from: publicKey
+    });
+    return result;
+  }
+
+  async deleteAwarder(publicKey) {
+    var instance = await LoyalCoinContract.deployed();
+
+    return await instance.deleteAwarder(publicKey, {
+      from: web3.eth.accounts[0]
+    });
+  }
+
+  async deleteAward(awardId, publicKey) {
+    var instance = await LoyalCoinContract.deployed();
+
+    return await instance.deleteAward(awardId, {
+      from: publicKey
+    });
   }
 }

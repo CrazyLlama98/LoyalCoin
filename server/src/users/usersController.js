@@ -8,7 +8,9 @@ import {
   RETAILER_ROLENAME,
   ADMIN_ROLENAME
 } from '../constants';
-import { authorize } from '../middlewares/jwt';
+import {
+  authorize
+} from '../middlewares/jwt';
 
 const userService = new UserService();
 const transactionService = new TransactionService();
@@ -37,9 +39,10 @@ function register(req, res, next) {
   };
 
   userService.createUser(user, USER_ROLENAME)
-    .then((newUser) => 
+    .then((newUser) =>
       transactionService.addGasToUser(newUser.publicKey, 0.100)
-        .then(() => res.json(newUser)))
+      .then(() => res.json(newUser))
+      .catch(err => userService.remove(newUser.id).then(() => next(err))))
     .catch(err => next(err));
 }
 
@@ -53,10 +56,12 @@ function registerRetailer(req, res, next) {
   userService.createUser(user, RETAILER_ROLENAME)
     .then((newUser) =>
       transactionService.addGasToUser(newUser.publicKey, 5)
-        .then(() => transactionService.addAwarder(newUser.publicKey)
-          .then(res.json(newUser)))
+      .then(() => transactionService.addAwarder(newUser.publicKey).then(() => res.json(newUser)))
+      .catch(err => userService.remove(newUser.id).then(() => next(err)))
     )
-    .catch(err => next(err));
+    .catch(err => {
+      next(err);
+    });
 }
 
 function login(req, res, next) {
