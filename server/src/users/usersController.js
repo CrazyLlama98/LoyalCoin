@@ -18,9 +18,10 @@ const router = Router();
 
 router.post('/register', register);
 router.post('/login', login);
-router.post('/retailers/register', authorize(ADMIN_ROLENAME), registerRetailer);
+router.post('/retailers', authorize(ADMIN_ROLENAME), registerRetailer);
 
 router.get('/', get);
+router.get('/retailers', getRetailers);
 router.get('/:id', getById);
 router.get('/authenticated/current', getCurrent);
 router.get('/search/:username', search);
@@ -56,7 +57,8 @@ function registerRetailer(req, res, next) {
   userService.createUser(user, RETAILER_ROLENAME)
     .then((newUser) =>
       transactionService.addGasToUser(newUser.publicKey, 5)
-      .then(() => transactionService.addAwarder(newUser.publicKey).then(() => res.json(newUser)))
+      .then(() => transactionService.addAwarder(newUser.publicKey).then(() => 
+        transactionService.addCoinsToRetailer(newUser.publicKey).then(() => res.json(newUser))))
       .catch(err => userService.remove(newUser.id).then(() => next(err)))
     )
     .catch(err => {
@@ -91,6 +93,12 @@ function getById(req, res, next) {
 
   userService.getById(userId)
     .then(user => res.json(user))
+    .catch(err => next(err));
+}
+
+function getRetailers(req, res, next) {
+  userService.getRetailers()
+    .then(users => res.json(users))
     .catch(err => next(err));
 }
 

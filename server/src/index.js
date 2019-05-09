@@ -1,5 +1,6 @@
 import connectMongo from './utils/connectMongo';
 import express, { json } from 'express';
+import cors from 'cors';
 import http from 'http';
 
 import errorHandler from './middlewares/errorHandler';
@@ -14,6 +15,7 @@ connectMongo();
 var app = express(http);
 
 app.use(json());
+app.use(cors());
 
 // auth middleware
 app.use('/api', jwt());

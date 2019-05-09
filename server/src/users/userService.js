@@ -5,7 +5,9 @@ import {
 import * as bcrypt from 'bcryptjs';
 import {
   SECRET_KEY,
-  ETHEREUM_URL
+  ETHEREUM_URL,
+  RETAILER_ROLENAME,
+  USER_ROLENAME
 } from '../constants';
 import NotFoundError from '../errors/notFoundError';
 import mongoose from 'mongoose';
@@ -68,7 +70,9 @@ class UserService {
   }
 
   async getAll() {
-    return (await User.find()).map(user => user.toDto());
+    return (await User.find({
+      roles: USER_ROLENAME
+    })).map(user => user.toDto());
   }
 
   async getById(userId) {
@@ -92,6 +96,12 @@ class UserService {
     };
 
     return (await User.find(query)).map(user => user.toDto());
+  }
+
+  async getRetailers() {
+    return (await User.find({
+      roles: RETAILER_ROLENAME
+    })).map(user => user.toDto());
   }
 
   async searchByUsername(search) {

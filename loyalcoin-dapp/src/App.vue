@@ -1,33 +1,25 @@
 <template>
-  <v-app>
-    <v-toolbar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn
-        flat
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Latest Release</span>
-      </v-btn>
-    </v-toolbar>
-
-    <v-content>
+  <v-app light>
+    <transition name="fade">
       <router-view></router-view>
-    </v-content>
+    </transition>
   </v-app>
 </template>
 
-<script>
-export default {
-  name: 'App',
-  data () {
-    return {
-      //
-    }
-  }
-}
-</script>
+<style lang="stylus">
+.fade-enter-active
+  transition: opacity 1s;
+
+.fade-leave-active
+  transition: opacity .1s;
+
+.fade-enter, .fade-leave-to 
+  opacity: 0;
+
+.fade-leave, .fade-enter-to
+  opacity: 1;
+
+.preserve-text
+  white-space: pre;
+  text-align: left;
+</style>

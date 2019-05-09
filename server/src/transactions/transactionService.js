@@ -11,6 +11,19 @@ var web3 = new Web3(provider);
 var LoyalCoinContract = contract(LoyalCoin);
 LoyalCoinContract.setProvider(provider);
 
+async function initCoinbase() {
+  var instance = await LoyalCoinContract.deployed();
+  var result = await instance.balanceOf(web3.eth.coinbase, { from: web3.eth.coinbase });
+
+  console.log('CoinBase: ' + result);
+  if (result == 0) {
+    await instance.mint(web3.eth.coinbase, 500000000, { from: web3.eth.coinbase });
+    result = await instance.balanceOf(web3.eth.coinbase, { from: web3.eth.coinbase });
+  }
+};
+
+initCoinbase();
+
 export default class TransactionService {
   async addGasToUser(publicKey, etherAmount) {
     web3.eth.sendTransaction({
@@ -55,5 +68,11 @@ export default class TransactionService {
     return await instance.deleteAward(awardId, {
       from: publicKey
     });
+  }
+
+  async addCoinsToRetailer(publicKey) {
+    var instance = await LoyalCoinContract.deployed();
+
+    await instance.transfer(publicKey, 15000, { from: web3.eth.coinbase });
   }
 }

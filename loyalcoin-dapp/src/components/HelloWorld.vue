@@ -1,29 +1,25 @@
 <template>
-  <div class="metamask-info">
-    <p>Network: {{ web3.version.network }}</p>
-    <p>Account: {{ web3.eth.coinbase }}</p>
-    <p>Balance: {{ web3.eth.balance }}</p>
-  </div>
+  <div></div>
 </template>
 
 <script>
-import { web3 } from "../store/types";
+import { authentication } from "../store/types";
 import store from "../store";
-import { mapGetters } from "vuex";
 
 export default {
   data: () => ({}),
-  computed: {
-    ...mapGetters(web3.namespace, {
-      web3: web3.getters.GET_WEB3
-    })
-  },
   beforeRouteEnter(to, from, next) {
-    store.dispatch(`${web3.namespace}/${web3.actions.REGISTER_WEB3}`)
-      .then(() => {
-        next();
-      })
-      .catch(() => {});
+    var userRoles = store.getters[`${authentication.namespace}/${authentication.getters.GET_CURRENT_USER}`].roles;
+
+    if (userRoles && userRoles.includes("Admin")) {
+      next('/retailers');
+    } else if (userRoles && userRoles.includes("Retailer")) {
+      next('/awards');
+    } else if (userRoles && userRoles.includes("Customer")) {
+      next('/dashboard');
+    } else {
+      next();
+    }
   }
 };
 </script>

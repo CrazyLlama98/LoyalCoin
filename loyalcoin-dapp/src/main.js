@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import 'roboto-fontface/css/roboto/roboto-fontface.css'
+import '@fortawesome/fontawesome-free/css/all.css'
 import './plugins/vuetify'
 import App from './App.vue'
 import store from './store'

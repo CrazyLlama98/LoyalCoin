@@ -48,7 +48,8 @@ userSchema.methods.toDto = function () {
     lastname: this.lastname,
     registerDate: this.registerDate,
     email: this.email,
-    publicKey: this.publicKey
+    publicKey: this.publicKey,
+    roles: this.roles
   };
 };
 
